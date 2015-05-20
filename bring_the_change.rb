@@ -6,26 +6,40 @@ require 'minitest/autorun'
 # r = Register.new r.change 0.99 # => [3, 2, 0, 4]
 
 class Register
-	def quarters
-		@quarters = 0.25
+	def initialize
+		@amount = 0
+		@quarter = 0.25
+		@dime = 0.10
+		@nickle = 0.05
+		@penny = 0.01
 	end
 
-	def dimes
-		@dimes = 0.10
-	end
-
-	def nickels
-		@nickels = 0.05
-	end
-
-	def pennies
-		@pennies = 0.01
+	def change_one_coin total, denom
+		count = total/denom
+		leftover = total % denom
+		return [leftover, count]
 	end
 
 	def change amount
-		@amount = amount
-		return nil if @amount < 0
+		q_result = change_one_coin(amount, @quarter)
+		q_number = q_result[1]
+		q_leftover = q_result[0]
+
+		d_result = change_one_coin(q_leftover, @dime)
+		d_number = d_result[1]
+		d_leftover = d_result[0]
+
+		n_result = change_one_coin(d_leftover, @nickel)
+		n_number = n_result[1]
+		n_leftover = n_result[0]
+
+		p_result = change_one_coin(n_leftover, @penny)
+		p_number = p_result[1]
+
+		return [q_number, d_number, n_number, p_number]
 	end
+
+
 end
 
 
