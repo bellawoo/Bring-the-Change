@@ -7,41 +7,43 @@ require 'minitest/autorun'
 
 class Register
 	def initialize
-		@amount = 0
-		@quarter = 0.25
-		@dime = 0.10
-		@nickle = 0.05
-		@penny = 0.01
+		@quarter = 25
+		@dime = 10
+		@nickel = 5
+		@penny = 1
 	end
 
 	def change_one_coin total, denom
-		count = total/denom
-		leftover = total % denom
-		return [leftover, count]
+		count = (total/denom).round
+		leftover = (total % denom).round
+		return [count, leftover]
 	end
 
 	def change amount
+		amount = (amount * 100).to_i
+
 		q_result = change_one_coin(amount, @quarter)
-		q_number = q_result[1]
-		q_leftover = q_result[0]
+		q_number = q_result[0]
+		q_leftover = q_result[1]
+		# q_number, leftover = change_one_coin(amount, @quarter)
 
 		d_result = change_one_coin(q_leftover, @dime)
-		d_number = d_result[1]
-		d_leftover = d_result[0]
+		d_number = d_result[0]
+		d_leftover = d_result[1]
+		# d_number, leftover = change_one_coin(amount, @dime)
 
 		n_result = change_one_coin(d_leftover, @nickel)
-		n_number = n_result[1]
-		n_leftover = n_result[0]
+		n_number = n_result[0]
+		n_leftover = n_result[1]
+		# n_number, leftover = change_one_coin(amount, @nickel)
 
 		p_result = change_one_coin(n_leftover, @penny)
-		p_number = p_result[1]
+		p_number = p_result[0]
+		# p_number, leftover = change_one_coin(leftover, @penny)
 
-		return [q_number, d_number, n_number, p_number]
+		return [q_number,d_number,n_number,p_number]
 	end
-
-
 end
-
 
 # Hard Mode
 # Option 1 - OO: * Write a set of tests to verify that your register works (preferably before writing the register) * Initialize the register with a fixed number of each coin. Note as the coins are distributed, and e.g. use 2 nickels when you run out of dimes. What should happen when you can't make change at all? Write specs for it and then implement it.
